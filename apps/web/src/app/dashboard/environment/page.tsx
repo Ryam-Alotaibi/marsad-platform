@@ -45,11 +45,11 @@ export default function EnvironmentPage() {
 
               <section className="rounded-[var(--radius-lg)] border border-border-subtle bg-raised p-5 shadow-card">
                 <h2 className="mb-4 text-sm font-semibold text-text-primary">متوسط المخاطر حسب العامل</h2>
-                <div className="flex items-end gap-6" style={{ height: 160 }}>
+                <div className="flex items-end gap-6">
                   {data.factors.map((f) => (
                     <div key={f.key} className="flex flex-1 flex-col items-center gap-2">
                       <span className="text-xs font-medium text-text-primary">{f.riskPct}%</span>
-                      <div className="flex w-full flex-1 items-end">
+                      <div className="flex h-24 w-full items-end">
                         <div
                           className={`w-full rounded-t-[var(--radius-sm)] ${TONE_BG[riskTone(f.riskPct)]}`}
                           style={{ height: `${Math.max(4, f.riskPct)}%` }}
