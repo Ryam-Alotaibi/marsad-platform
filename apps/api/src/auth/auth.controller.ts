@@ -47,10 +47,18 @@ export class AuthController {
       ? Math.max(0, decoded.exp * 1000 - Date.now())
       : 15 * 60 * 1000;
 
+    // Web and API are deployed on different subdomains (separate "sites" per
+    // the Public Suffix List, e.g. distinct *.up.railway.app entries), so the
+    // cookie must be sameSite: 'none' to survive cross-site fetches — which
+    // in turn requires secure: true or browsers drop it outright. Locally
+    // both run on http://localhost (same-site), where 'lax' + non-secure is
+    // correct instead.
+    const crossSite = process.env.NODE_ENV === 'production';
+
     res.cookie(AUTH_COOKIE_NAME, accessToken, {
       httpOnly: true,
-      sameSite: 'lax',
-      secure: process.env.NODE_ENV === 'production',
+      sameSite: crossSite ? 'none' : 'lax',
+      secure: crossSite,
       path: '/',
       maxAge,
     });
