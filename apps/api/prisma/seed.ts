@@ -45,8 +45,8 @@ const TENANTS: TenantSeed[] = [
     telecomProviders: ["STC", "موبايلي", "زين السعودية", "GO تليكوم"],
   },
   {
-    name: "Dr. Sulaiman Al Habib Hospital",
-    nameAr: "مستشفى الدكتور سليمان الحبيب",
+    name: "Specialized Care Hospital",
+    nameAr: "مستشفى الرعاية التخصصي",
     type: TenantType.HEALTHCARE,
     primaryColor: "#124C5C",
     secondaryColor: "#0B2430",
@@ -55,8 +55,8 @@ const TENANTS: TenantSeed[] = [
     telecomProviders: ["STC", "موبايلي", "زين السعودية", "GO تليكوم"],
   },
   {
-    name: "Nasij Technologies",
-    nameAr: "شركة النسيج التقنية",
+    name: "Riyada Industrial Company",
+    nameAr: "شركة الريادة الصناعية",
     type: TenantType.PRIVATE,
     primaryColor: "#124C5C",
     secondaryColor: "#0B2430",

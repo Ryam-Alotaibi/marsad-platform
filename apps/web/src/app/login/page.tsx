@@ -8,8 +8,12 @@ import { t } from "@/i18n/t";
 import { BrandMark } from "@/components/brand-mark";
 import { ThemeToggle } from "@/components/theme-toggle";
 
-const DEMO_EMAIL = "tenant-admin@gov.marsad.local";
 const DEMO_PASSWORD = "Marsad@2026";
+const DEMO_ACCOUNTS = [
+  { label: "الهيئة العامة للخدمات الرقمية", email: "tenant-admin@gov.marsad.local" },
+  { label: "مستشفى الرعاية التخصصي", email: "tenant-admin@health.marsad.local" },
+  { label: "شركة الريادة الصناعية", email: "tenant-admin@corp.marsad.local" },
+];
 
 export default function LoginPage() {
   const router = useRouter();
@@ -122,21 +126,24 @@ export default function LoginPage() {
             </form>
 
             <div className="mt-6 rounded-[var(--radius-md)] border border-dashed border-border-subtle bg-sunken p-4">
-              <p className="text-xs font-medium text-text-secondary">بيانات دخول تجريبية موحَّدة (للعرض على الفريق)</p>
-              <div className="mt-2 flex flex-col gap-1 text-xs text-text-tertiary" dir="ltr">
-                <span>{DEMO_EMAIL}</span>
-                <span>{DEMO_PASSWORD}</span>
+              <p className="text-xs font-medium text-text-secondary">حسابات دخول تجريبية</p>
+              <div className="mt-3 flex flex-col gap-2">
+                {DEMO_ACCOUNTS.map((account) => (
+                  <button
+                    key={account.email}
+                    type="button"
+                    onClick={() => {
+                      setEmail(account.email);
+                      setPassword(DEMO_PASSWORD);
+                    }}
+                    className="flex w-full items-center justify-between rounded-[var(--radius-sm)] border border-border-subtle bg-raised px-3 py-2 text-start transition-colors hover:border-brand/50"
+                  >
+                    <span className="text-xs font-medium text-text-secondary">{account.label}</span>
+                    <span className="text-[11px] text-text-tertiary" dir="ltr">{account.email}</span>
+                  </button>
+                ))}
               </div>
-              <button
-                type="button"
-                onClick={() => {
-                  setEmail(DEMO_EMAIL);
-                  setPassword(DEMO_PASSWORD);
-                }}
-                className="mt-3 w-full rounded-[var(--radius-sm)] border border-border-subtle bg-raised px-3 py-2 text-xs font-medium text-text-secondary transition-colors hover:border-brand/50 hover:text-brand"
-              >
-                تعبئة البيانات تلقائيًا
-              </button>
+              <p className="mt-2.5 text-[11px] text-text-tertiary" dir="ltr">كلمة المرور لجميع الحسابات: {DEMO_PASSWORD}</p>
             </div>
 
             <p className="mt-6 text-center text-sm text-text-tertiary">
