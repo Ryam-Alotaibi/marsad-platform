@@ -4,9 +4,8 @@
 
 /*
   نظام تصميم مرصاد — Design tokens (مراجعة v2: هوية رسمية حكومية)
-  أخضر مؤسسي داكن مرتبط بالهوية الوطنية + لمسة ذهبية للتمييز، على محايدات
-  دافئة (لا رمادي أزرق البرمجيات التقنية العام) — بديل مقصود يميّز مرصاد
-  تمامًا عن أي هوية زرقاء نمطية للبرمجيات.
+  كحلي/تيل داكن أساسي + لمسة ذهبية للتمييز، على محايدات دافئة (لا رمادي
+  أزرق البرمجيات التقنية العام) — بديل مقصود عن الأزرق الأحادي السابق.
   ليست ألوان Bootstrap/Tailwind الافتراضية، وليست نسخة عن هوية أي جهة
   حكومية فعلية. تُدرَج كمتغيرات CSS بحيث تقدر كل جهة (Tenant) تجاوزها
   بـ primaryColor/secondaryColor الخاصة بها.
@@ -27,11 +26,11 @@
   --ink-900: #18140f;
   --ink-950: #0d0a07;
 
-  /* Accent — deep institutional green, formal/national rather than SaaS-blue */
-  --accent-400: #4f8f72;
-  --accent-500: #2e6b4f;
-  --accent-600: #1e4a36;
-  --accent-700: #0f2e20;
+  /* Accent — deep navy-teal, formal/institutional rather than SaaS-bright */
+  --accent-400: #3e8fa0;
+  --accent-500: #1c6b7f;
+  --accent-600: #124c5c;
+  --accent-700: #0b3641;
 
   /* Gold — used sparingly: highlights, badges, active-state emphasis only */
   --gold-400: #dfc066;
