@@ -458,6 +458,13 @@ async function seedTenant(config: TenantSeed) {
 
 async function main() {
   console.log("حذف البيانات القديمة...");
+  // scenario_impacts -> sites is a RESTRICT (not CASCADE) foreign key, so it
+  // must be cleared explicitly before tenant.deleteMany() cascades into
+  // sites — otherwise re-seeding on top of any prior "شغّلي محاكاة" activity
+  // fails with a foreign key violation.
+  await prisma.scenarioImpact.deleteMany();
+  await prisma.scenarioRun.deleteMany();
+  await prisma.playbook.deleteMany();
   await prisma.tenant.deleteMany();
 
   for (const config of TENANTS) {
