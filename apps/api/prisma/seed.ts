@@ -42,17 +42,17 @@ const TENANTS: TenantSeed[] = [
     secondaryColor: "#0B2430",
     slug: "gov",
     regions: ["المنطقة الوسطى", "المنطقة الشرقية"],
-    telecomProviders: ["اتصالات الأولى", "شبكة نور", "الخط الوطني", "موجة الاتصالات"],
+    telecomProviders: ["STC", "موبايلي", "زين السعودية", "GO تليكوم"],
   },
   {
-    name: "Al-Amal Specialist Hospital",
-    nameAr: "مستشفى الأمل التخصصي",
+    name: "Dr. Sulaiman Al Habib Hospital",
+    nameAr: "مستشفى الدكتور سليمان الحبيب",
     type: TenantType.HEALTHCARE,
     primaryColor: "#1F6B52",
     secondaryColor: "#0F3327",
     slug: "health",
     regions: ["مبنى العيادات", "مبنى الطوارئ"],
-    telecomProviders: ["اتصالات الأولى", "شبكة نور", "الخط الوطني", "موجة الاتصالات"],
+    telecomProviders: ["STC", "موبايلي", "زين السعودية", "GO تليكوم"],
   },
   {
     name: "Nasij Technologies",
@@ -62,7 +62,7 @@ const TENANTS: TenantSeed[] = [
     secondaryColor: "#3D2A15",
     slug: "corp",
     regions: ["المقر الرئيسي", "مركز البيانات"],
-    telecomProviders: ["اتصالات الأولى", "شبكة نور", "الخط الوطني", "موجة الاتصالات"],
+    telecomProviders: ["STC", "موبايلي", "زين السعودية", "GO تليكوم"],
   },
 ];
 

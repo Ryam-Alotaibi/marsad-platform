@@ -18,6 +18,7 @@ import {
   RadarIcon,
   ShieldCheckIcon,
   ClipboardListIcon,
+  InfoIcon,
 } from "@/components/nav-icons";
 import { CloudIcon } from "@/components/stat-icons";
 import { BrandMark } from "@/components/brand-mark";
@@ -74,6 +75,7 @@ const NAV_GROUPS: NavGroup[] = [
   {
     label: "الإدارة",
     items: [
+      { href: "/dashboard/about", label: "عن النظام", icon: InfoIcon },
       { href: "/dashboard/guide", label: "دليل المستخدم", icon: BookIcon },
       { href: "/dashboard/audit-log", label: "سجل التدقيق", icon: ClipboardListIcon, adminOnly: true },
     ],
