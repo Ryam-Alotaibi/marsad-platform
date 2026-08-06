@@ -1,0 +1,55 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build:
+    name: Build & typecheck (web, api, shared)
+    runs-on: ubuntu-latest
+    env:
+      # apps/api's build only needs a valid connection *string* to generate
+      # the Prisma client's types — no database is actually contacted during
+      # `nest build`, so a placeholder is fine here.
+      DATABASE_URL: postgresql://user:pass@localhost:5432/marsad
+      MIGRATOR_DATABASE_URL: postgresql://user:pass@localhost:5432/marsad
+      JWT_ACCESS_SECRET: ci_placeholder_secret
+      JWT_REFRESH_SECRET: ci_placeholder_secret
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Generate Prisma client
+        run: npx prisma generate
+        working-directory: apps/api
+
+      - name: Build (packages/shared → apps/web → apps/api)
+        run: npm run build
+
+  ml-tests:
+    name: apps/ml — pytest (real FedAvg unit tests)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+        working-directory: apps/ml
+
+      - name: Run tests
+        run: pytest -v
+        working-directory: apps/ml

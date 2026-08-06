@@ -1,0 +1,52 @@
+{
+  "app": {
+    "name": "مرصاد",
+    "tagline": "منصة وطنية للتنبؤ الذكي بالأعطال التقنية"
+  },
+  "auth": {
+    "login": {
+      "title": "تسجيل الدخول",
+      "subtitle": "أدخلي بيانات حسابك للوصول إلى لوحة الجهة",
+      "emailLabel": "البريد الإلكتروني",
+      "emailPlaceholder": "name@example.com",
+      "passwordLabel": "كلمة المرور",
+      "passwordPlaceholder": "••••••••",
+      "submit": "دخول",
+      "submitting": "جارِ التحقق...",
+      "errorInvalid": "البريد الإلكتروني أو كلمة المرور غير صحيحة",
+      "errorGeneric": "تعذّر تسجيل الدخول، حاولي مرة أخرى"
+    }
+  },
+  "dashboard": {
+    "welcome": "مرحبًا، {name}",
+    "roleLabel": "الدور",
+    "tenantLabel": "الجهة",
+    "logout": "تسجيل الخروج",
+    "statCardsTitle": "نظرة سريعة",
+    "activeSystems": "الأنظمة النشطة",
+    "systemHealth": "صحة النظام العامة",
+    "weatherRisk": "مخاطر الطقس",
+    "currentTemp": "درجة الحرارة الحالية",
+    "externalFactorsTitle": "العوامل الخارجية المؤثرة",
+    "telecomStatusTitle": "حالة دوائر الاتصالات",
+    "telecomLatency": "زمن الاستجابة",
+    "telecomUptime": "نسبة التشغيل",
+    "noData": "لا توجد بيانات كافية بعد"
+  },
+  "predictions": {
+    "title": "التنبؤ الذكي العاجل",
+    "confidence": "نسبة الثقة",
+    "rootCause": "السبب الجذري",
+    "window": "النافذة الزمنية المتوقعة",
+    "actionsTitle": "الحلول الإبداعية والمسؤوليات",
+    "assignedTo": "المسؤول",
+    "empty": "لا توجد تنبؤات نشطة حاليًا"
+  },
+  "alerts": {
+    "title": "التنبيهات والمخاطر الموحد",
+    "alertsSection": "مركز التنبيهات",
+    "riskSection": "تقييم المخاطر متعدد العوامل",
+    "empty": "لا توجد تنبيهات حاليًا",
+    "riskEmpty": "لا توجد بيانات مخاطر كافية بعد"
+  }
+}

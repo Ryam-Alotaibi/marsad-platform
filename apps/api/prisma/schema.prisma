@@ -1,0 +1,814 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("MIGRATOR_DATABASE_URL")
+}
+
+// ─────────────────────────────────────────────────────────────────────────
+// Enums
+// ─────────────────────────────────────────────────────────────────────────
+
+enum TenantType {
+  GOVERNMENT
+  HEALTHCARE
+  PRIVATE
+  NONPROFIT
+}
+
+enum SiteType {
+  MAIN_BUILDING
+  BRANCH
+}
+
+enum RoleKey {
+  SUPER_ADMIN
+  TENANT_ADMIN
+  REGION_MANAGER
+  SUPPORT_ENGINEER
+  OPERATIONS_CENTER
+  SITE_MANAGER
+  EMPLOYEE
+}
+
+enum AvailabilityStatus {
+  AVAILABLE
+  BUSY
+  UNAVAILABLE
+}
+
+enum SensorType {
+  TEMPERATURE
+  HUMIDITY
+  AQI
+  CO2
+  WATER_LEAK
+  LIGHT
+}
+
+enum SensorStatus {
+  NORMAL
+  WARNING
+  CRITICAL
+  OFFLINE
+}
+
+enum PredictionStatus {
+  ACTIVE
+  RESOLVED
+  DISMISSED
+}
+
+enum ActionStatus {
+  PENDING
+  IN_PROGRESS
+  DONE
+}
+
+enum RiskFactorType {
+  HUMAN_AWARENESS
+  LEGAL_COMPLIANCE
+  CYBER_COMPLIANCE
+  ENVIRONMENTAL
+  INFRASTRUCTURE_AGE
+}
+
+enum AlertCategory {
+  POWER
+  NETWORK
+  APPS
+  ENVIRONMENT
+  DATABASE
+  SECURITY
+  INFRASTRUCTURE
+}
+
+enum AlertSeverity {
+  CRITICAL
+  WARNING
+  INFO
+}
+
+enum AlertStatus {
+  OPEN
+  ACKNOWLEDGED
+  RESOLVED
+}
+
+enum NotificationChannelType {
+  PUSH
+  EMAIL
+  SMS
+  WHATSAPP
+  VOICE_CALL
+}
+
+enum NotificationStatus {
+  QUEUED
+  SENT
+  FAILED
+}
+
+enum DeviceCategoryType {
+  AC
+  LIGHTING
+  COMPUTERS
+  PRINTERS
+  MONITORS
+}
+
+enum ChatRole {
+  USER
+  ASSISTANT
+}
+
+enum ScenarioTrigger {
+  MANUAL
+  NIGHTLY_SWEEPER
+}
+
+enum ScenarioStatus {
+  PENDING
+  RUNNING
+  COMPLETED
+}
+
+enum ScheduledServiceType {
+  HEARING
+  APPOINTMENT
+  TRANSACTION
+}
+
+enum ContinuitySourceType {
+  PREDICTION
+  SCENARIO
+}
+
+enum ContinuityActionType {
+  REMOTE
+  RE_ROUTED
+  CANCELLED
+}
+
+enum SystemCategory {
+  SERVER
+  MANAGEMENT_SYSTEM
+  NETWORK
+}
+
+enum SystemStatus {
+  ACTIVE
+  WARNING
+  DOWN
+}
+
+// ─────────────────────────────────────────────────────────────────────────
+// Tenancy & identity
+// ─────────────────────────────────────────────────────────────────────────
+
+model Tenant {
+  id             String     @id @default(cuid())
+  name           String
+  nameAr         String
+  type           TenantType
+  logoUrl        String?
+  primaryColor   String     @default("#2563EB")
+  secondaryColor String     @default("#0F172A")
+  locale         String     @default("ar")
+  createdAt      DateTime   @default(now())
+  updatedAt      DateTime   @updatedAt
+
+  regions              Region[]
+  sites                Site[]
+  users                User[]
+  roles                Role[]
+  telecomProviders     TelecomProvider[]
+  predictions          Prediction[]
+  riskFactors          RiskFactor[]
+  alerts               Alert[]
+  escalationRules      EscalationRule[]
+  notificationChannels NotificationChannel[]
+  deviceCategories     DeviceCategory[]
+  rationingSchedules   RationingSchedule[]
+  chatConversations    ChatConversation[]
+  flParticipation      FLParticipation?
+  flTenantUpdates      FLTenantUpdate[]
+  scenarioRuns         ScenarioRun[]
+  playbooks            Playbook[]
+  scheduledServices    ScheduledService[]
+  auditLogs            AuditLog[]
+  systemComponents     SystemComponent[]
+
+  @@map("tenants")
+}
+
+model Region {
+  id        String   @id @default(cuid())
+  tenantId  String
+  tenant    Tenant   @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  name      String
+  type      String   @default("branch")
+  createdAt DateTime @default(now())
+
+  sites Site[]
+  users User[]
+
+  @@index([tenantId])
+  @@map("regions")
+}
+
+model Site {
+  id        String   @id @default(cuid())
+  tenantId  String
+  tenant    Tenant   @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  regionId  String
+  region    Region   @relation(fields: [regionId], references: [id], onDelete: Cascade)
+  name      String
+  type      SiteType @default(BRANCH)
+  latitude  Float?
+  longitude Float?
+  address   String?
+  infrastructureAgeYears Int @default(10)
+  createdAt DateTime @default(now())
+
+  users                 User[]
+  sensors               Sensor[]
+  powerReadings         PowerReading[]
+  telecomStatusReadings TelecomStatusReading[]
+  weatherReadings       WeatherReading[]
+  scheduledEvents       ScheduledEvent[]
+  predictions           Prediction[]
+  riskFactors           RiskFactor[]
+  alerts                Alert[]
+  deviceCategories      DeviceCategory[]
+  rationingSchedules    RationingSchedule[]
+  energyConsumptionLogs EnergyConsumptionLog[]
+  scenarioImpacts       ScenarioImpact[]
+  scheduledServices     ScheduledService[]
+
+  @@index([tenantId])
+  @@index([regionId])
+  @@map("sites")
+}
+
+model Role {
+  id          String   @id @default(cuid())
+  tenantId    String?
+  tenant      Tenant?  @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  key         RoleKey
+  name        String
+  permissions Json     @default("{}")
+  createdAt   DateTime @default(now())
+
+  users User[]
+
+  @@unique([tenantId, key])
+  @@map("roles")
+}
+
+model User {
+  id                 String              @id @default(cuid())
+  tenantId           String
+  tenant             Tenant              @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  regionId           String?
+  region             Region?             @relation(fields: [regionId], references: [id])
+  siteId             String?
+  site               Site?               @relation(fields: [siteId], references: [id])
+  roleId             String
+  role               Role                @relation(fields: [roleId], references: [id])
+  fullName           String
+  email              String
+  passwordHash       String
+  phone              String?
+  availabilityStatus AvailabilityStatus  @default(AVAILABLE)
+  createdAt          DateTime            @default(now())
+  updatedAt          DateTime            @updatedAt
+
+  predictionActions PredictionAction[]
+  alertPreference   AlertPreference?
+  chatConversations ChatConversation[]
+  notificationLogs  NotificationLog[]
+  auditLogs         AuditLog[]
+
+  @@unique([tenantId, email])
+  @@index([tenantId])
+  @@map("users")
+}
+
+// ─────────────────────────────────────────────────────────────────────────
+// لوحة التحكم التفصيلية — system components (5.4)
+// ─────────────────────────────────────────────────────────────────────────
+
+model SystemComponent {
+  id        String         @id @default(cuid())
+  tenantId  String
+  tenant    Tenant         @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  name      String
+  category  SystemCategory
+  status    SystemStatus   @default(ACTIVE)
+  loadPct   Float
+  updatedAt DateTime       @updatedAt
+
+  @@index([tenantId])
+  @@map("system_components")
+}
+
+// ─────────────────────────────────────────────────────────────────────────
+// IoT & time-series readings
+// ─────────────────────────────────────────────────────────────────────────
+
+model Sensor {
+  id        String       @id @default(cuid())
+  siteId    String
+  site      Site         @relation(fields: [siteId], references: [id], onDelete: Cascade)
+  type      SensorType
+  unit      String
+  status    SensorStatus @default(NORMAL)
+  createdAt DateTime     @default(now())
+
+  readings SensorReading[]
+
+  @@index([siteId])
+  @@map("sensors")
+}
+
+model SensorReading {
+  id         String   @id @default(cuid())
+  sensorId   String
+  sensor     Sensor   @relation(fields: [sensorId], references: [id], onDelete: Cascade)
+  value      Float
+  recordedAt DateTime @default(now())
+
+  @@index([sensorId, recordedAt])
+  @@map("sensor_readings")
+}
+
+model PowerReading {
+  id               String   @id @default(cuid())
+  siteId           String
+  site             Site     @relation(fields: [siteId], references: [id], onDelete: Cascade)
+  currentLoadKw    Float
+  maxCapacityKw    Float
+  generatorFuelPct Float
+  upsChargePct     Float
+  voltage          Float
+  recordedAt       DateTime @default(now())
+
+  @@index([siteId, recordedAt])
+  @@map("power_readings")
+}
+
+model TelecomProvider {
+  id       String @id @default(cuid())
+  tenantId String
+  tenant   Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  name     String
+
+  statusReadings TelecomStatusReading[]
+
+  @@index([tenantId])
+  @@map("telecom_providers")
+}
+
+model TelecomStatusReading {
+  id            String          @id @default(cuid())
+  siteId        String
+  site          Site            @relation(fields: [siteId], references: [id], onDelete: Cascade)
+  providerId    String
+  provider      TelecomProvider @relation(fields: [providerId], references: [id], onDelete: Cascade)
+  latencyMs     Float
+  packetLossPct Float
+  status        String
+  recordedAt    DateTime        @default(now())
+
+  @@index([siteId, recordedAt])
+  @@index([providerId, recordedAt])
+  @@map("telecom_status_readings")
+}
+
+model WeatherReading {
+  id           String   @id @default(cuid())
+  siteId       String
+  site         Site     @relation(fields: [siteId], references: [id], onDelete: Cascade)
+  temperatureC Float
+  humidityPct  Float
+  aqi          Float
+  recordedAt   DateTime @default(now())
+
+  @@index([siteId, recordedAt])
+  @@map("weather_readings")
+}
+
+model ScheduledEvent {
+  id                     String   @id @default(cuid())
+  siteId                 String
+  site                   Site     @relation(fields: [siteId], references: [id], onDelete: Cascade)
+  name                   String
+  expectedLoadImpactPct  Float
+  startAt                DateTime
+  endAt                  DateTime
+
+  @@index([siteId])
+  @@map("scheduled_events")
+}
+
+// ─────────────────────────────────────────────────────────────────────────
+// Prediction & risk
+// ─────────────────────────────────────────────────────────────────────────
+
+model Prediction {
+  id            String           @id @default(cuid())
+  tenantId      String
+  tenant        Tenant           @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  siteId        String?
+  site          Site?            @relation(fields: [siteId], references: [id])
+  title         String
+  confidencePct Float
+  rootCause     String
+  windowStart   DateTime
+  windowEnd     DateTime
+  status        PredictionStatus @default(ACTIVE)
+  createdAt     DateTime         @default(now())
+
+  actions           PredictionAction[]
+  continuityActions ContinuityAction[]
+
+  @@index([tenantId])
+  @@map("predictions")
+}
+
+model PredictionAction {
+  id              String        @id @default(cuid())
+  predictionId    String
+  prediction      Prediction    @relation(fields: [predictionId], references: [id], onDelete: Cascade)
+  description     String
+  assignedUserId  String?
+  assignedUser    User?         @relation(fields: [assignedUserId], references: [id])
+  assignedRoleKey RoleKey?
+  status          ActionStatus  @default(PENDING)
+  createdAt       DateTime      @default(now())
+
+  @@index([predictionId])
+  @@map("prediction_actions")
+}
+
+model RiskFactor {
+  id         String         @id @default(cuid())
+  tenantId   String
+  tenant     Tenant         @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  siteId     String
+  site       Site           @relation(fields: [siteId], references: [id], onDelete: Cascade)
+  factorType RiskFactorType
+  weight     Float
+  score      Float
+  recordedAt DateTime       @default(now())
+
+  @@index([tenantId])
+  @@index([siteId, recordedAt])
+  @@map("risk_factors")
+}
+
+// ─────────────────────────────────────────────────────────────────────────
+// Alerts, escalation & notifications
+// ─────────────────────────────────────────────────────────────────────────
+
+model Alert {
+  id          String        @id @default(cuid())
+  tenantId    String
+  tenant      Tenant        @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  siteId      String?
+  site        Site?         @relation(fields: [siteId], references: [id])
+  category    AlertCategory
+  severity    AlertSeverity
+  title       String
+  description String
+  status      AlertStatus   @default(OPEN)
+  createdAt   DateTime      @default(now())
+  resolvedAt  DateTime?
+
+  escalationLogs   EscalationLog[]
+  notificationLogs NotificationLog[]
+
+  @@index([tenantId])
+  @@index([siteId])
+  @@map("alerts")
+}
+
+model EscalationRule {
+  id           String @id @default(cuid())
+  tenantId     String
+  tenant       Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  level        Int
+  delayMinutes Int
+  notifyRoles  Json
+
+  @@index([tenantId])
+  @@map("escalation_rules")
+}
+
+model EscalationLog {
+  id              String   @id @default(cuid())
+  alertId         String
+  alert           Alert    @relation(fields: [alertId], references: [id], onDelete: Cascade)
+  level           Int
+  triggeredAt     DateTime @default(now())
+  notifiedUserIds Json
+
+  @@index([alertId])
+  @@map("escalation_logs")
+}
+
+model NotificationChannel {
+  id       String                  @id @default(cuid())
+  tenantId String
+  tenant   Tenant                  @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  type     NotificationChannelType
+  config   Json                    @default("{}")
+  isActive Boolean                 @default(true)
+
+  @@index([tenantId])
+  @@map("notification_channels")
+}
+
+model NotificationLog {
+  id              String                  @id @default(cuid())
+  alertId         String
+  alert           Alert                   @relation(fields: [alertId], references: [id], onDelete: Cascade)
+  channel         NotificationChannelType
+  recipientId     String
+  recipient       User                    @relation(fields: [recipientId], references: [id], onDelete: Cascade)
+  renderedContent String
+  status          NotificationStatus      @default(QUEUED)
+  sentAt          DateTime?
+  isMock          Boolean                 @default(true)
+  providerRef     String?
+
+  @@index([alertId])
+  @@map("notification_logs")
+}
+
+model AlertPreference {
+  id               String @id @default(cuid())
+  userId           String @unique
+  user             User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  channels         Json   @default("[]")
+  thresholds       Json   @default("{}")
+  watchedRegionIds Json   @default("[]")
+
+  @@map("alert_preferences")
+}
+
+// ─────────────────────────────────────────────────────────────────────────
+// Energy rationing
+// ─────────────────────────────────────────────────────────────────────────
+
+model DeviceCategory {
+  id             String             @id @default(cuid())
+  tenantId       String
+  tenant         Tenant             @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  siteId         String
+  site           Site               @relation(fields: [siteId], references: [id], onDelete: Cascade)
+  category       DeviceCategoryType
+  activeCount    Int
+  offCount       Int
+  scheduledCount Int
+  consumptionKw  Float
+
+  @@index([tenantId])
+  @@index([siteId])
+  @@map("device_categories")
+}
+
+model RationingSchedule {
+  id                 String  @id @default(cuid())
+  tenantId           String
+  tenant             Tenant  @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  siteId             String
+  site               Site    @relation(fields: [siteId], references: [id], onDelete: Cascade)
+  name               String
+  timeOfDay          String
+  actionDescription  String
+  expectedSavingsPct Float
+  isActive           Boolean @default(true)
+
+  @@index([tenantId])
+  @@map("rationing_schedules")
+}
+
+model EnergyConsumptionLog {
+  id            String   @id @default(cuid())
+  siteId        String
+  site          Site     @relation(fields: [siteId], references: [id], onDelete: Cascade)
+  recordedAt    DateTime @default(now())
+  consumptionKw Float
+  savingsKw     Float
+
+  @@index([siteId, recordedAt])
+  @@map("energy_consumption_logs")
+}
+
+// ─────────────────────────────────────────────────────────────────────────
+// AI advisor chat
+// ─────────────────────────────────────────────────────────────────────────
+
+model ChatConversation {
+  id        String   @id @default(cuid())
+  tenantId  String
+  tenant    Tenant   @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+
+  messages ChatMessage[]
+
+  @@index([tenantId])
+  @@index([userId])
+  @@map("chat_conversations")
+}
+
+model ChatMessage {
+  id             String           @id @default(cuid())
+  conversationId String
+  conversation   ChatConversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  role           ChatRole
+  content        String
+  contextRefs    Json             @default("[]")
+  createdAt      DateTime         @default(now())
+
+  @@index([conversationId])
+  @@map("chat_messages")
+}
+
+// ─────────────────────────────────────────────────────────────────────────
+// مرصاد الاتحادي — federated learning registry
+// ─────────────────────────────────────────────────────────────────────────
+
+model FLModel {
+  id               String   @id @default(cuid())
+  name             String
+  version          String
+  taskType         String
+  globalWeightsRef String?
+  createdAt        DateTime @default(now())
+
+  rounds FLRound[]
+
+  @@unique([name, version])
+  @@map("fl_models")
+}
+
+model FLRound {
+  id                String    @id @default(cuid())
+  modelId           String
+  model             FLModel   @relation(fields: [modelId], references: [id], onDelete: Cascade)
+  roundNumber       Int
+  startedAt         DateTime  @default(now())
+  completedAt       DateTime?
+  aggregateAccuracy Float?
+
+  tenantUpdates FLTenantUpdate[]
+
+  @@index([modelId])
+  @@map("fl_rounds")
+}
+
+model FLTenantUpdate {
+  id             String   @id @default(cuid())
+  roundId        String
+  round          FLRound  @relation(fields: [roundId], references: [id], onDelete: Cascade)
+  tenantId       String
+  tenant         Tenant   @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  accuracyBefore Float?
+  accuracyAfter  Float?
+  weightsHash    String
+  auditHashPrev  String?
+  auditHashSelf  String
+  submittedAt    DateTime @default(now())
+
+  @@index([roundId])
+  @@index([tenantId])
+  @@map("fl_tenant_updates")
+}
+
+model FLParticipation {
+  id       String   @id @default(cuid())
+  tenantId String   @unique
+  tenant   Tenant   @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  joinedAt DateTime @default(now())
+  isActive Boolean  @default(true)
+
+  @@map("fl_participation")
+}
+
+// ─────────────────────────────────────────────────────────────────────────
+// التوأم الرقمي التوليدي — scenario simulation
+// ─────────────────────────────────────────────────────────────────────────
+
+model ScenarioRun {
+  id                   String           @id @default(cuid())
+  tenantId             String?
+  tenant               Tenant?          @relation(fields: [tenantId], references: [id])
+  triggeredBy          ScenarioTrigger
+  inputFactors         Json
+  isNovel              Boolean          @default(false)
+  impactScore          Float?
+  rootCauseExplanation String?
+  status               ScenarioStatus   @default(PENDING)
+  createdAt            DateTime         @default(now())
+
+  impacts           ScenarioImpact[]
+  playbooks         Playbook[]
+  continuityActions ContinuityAction[]
+
+  @@index([tenantId])
+  @@map("scenario_runs")
+}
+
+model ScenarioImpact {
+  id              String      @id @default(cuid())
+  scenarioRunId   String
+  scenarioRun     ScenarioRun @relation(fields: [scenarioRunId], references: [id], onDelete: Cascade)
+  affectedSiteId  String
+  affectedSite    Site        @relation(fields: [affectedSiteId], references: [id])
+  affectedService String
+  estimatedCost   Float?
+  cascadeStep     Int
+
+  @@index([scenarioRunId])
+  @@map("scenario_impacts")
+}
+
+model Playbook {
+  id            String      @id @default(cuid())
+  tenantId      String
+  tenant        Tenant      @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  scenarioRunId String
+  scenarioRun   ScenarioRun @relation(fields: [scenarioRunId], references: [id], onDelete: Cascade)
+  name          String
+  isFrozen      Boolean     @default(false)
+  activatedAt   DateTime?
+
+  @@index([tenantId])
+  @@map("playbooks")
+}
+
+// ─────────────────────────────────────────────────────────────────────────
+// محرك استمرارية الخدمة
+// ─────────────────────────────────────────────────────────────────────────
+
+model ScheduledService {
+  id                 String               @id @default(cuid())
+  tenantId           String
+  tenant             Tenant               @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  siteId             String
+  site               Site                 @relation(fields: [siteId], references: [id], onDelete: Cascade)
+  type               ScheduledServiceType
+  scheduledAt        DateTime
+  beneficiaryContact String
+
+  continuityActions ContinuityAction[]
+
+  @@index([tenantId])
+  @@index([siteId, scheduledAt])
+  @@map("scheduled_services")
+}
+
+model ContinuityAction {
+  id                 String               @id @default(cuid())
+  sourceType         ContinuitySourceType
+  predictionId       String?
+  prediction         Prediction?          @relation(fields: [predictionId], references: [id])
+  scenarioRunId      String?
+  scenarioRun        ScenarioRun?         @relation(fields: [scenarioRunId], references: [id])
+  scheduledServiceId String
+  scheduledService   ScheduledService     @relation(fields: [scheduledServiceId], references: [id], onDelete: Cascade)
+  actionTaken        ContinuityActionType
+  notifiedAt         DateTime?
+  createdAt          DateTime             @default(now())
+
+  @@index([scheduledServiceId])
+  @@map("continuity_actions")
+}
+
+// ─────────────────────────────────────────────────────────────────────────
+// Audit
+// ─────────────────────────────────────────────────────────────────────────
+
+model AuditLog {
+  id          String   @id @default(cuid())
+  tenantId    String
+  tenant      Tenant   @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  actorUserId String?
+  actor       User?    @relation(fields: [actorUserId], references: [id])
+  action      String
+  entityType  String
+  entityId    String
+  metadata    Json     @default("{}")
+  createdAt   DateTime @default(now())
+
+  @@index([tenantId, createdAt])
+  @@map("audit_logs")
+}
