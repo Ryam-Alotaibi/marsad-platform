@@ -90,12 +90,12 @@ export function Sidebar() {
   const isAdmin = ADMIN_ONLY_ROLES.has(user.roleKey);
 
   return (
-    <aside className="flex w-64 shrink-0 flex-col border-e border-border-subtle bg-[#b3b8c2]">
+    <aside className="flex w-64 shrink-0 flex-col border-e border-border-subtle bg-[var(--brand-gold)]">
       <div className="flex items-center gap-2.5 px-5 py-5">
-        <BrandMark className="h-7 w-7 text-[var(--brand-gold)]" />
-        <span className="text-base font-semibold text-text-primary">{t("app.name")}</span>
+        <BrandMark className="h-7 w-7 text-white" />
+        <span className="text-base font-semibold text-white">{t("app.name")}</span>
       </div>
-      <div className="mx-5 h-px bg-border-subtle" />
+      <div className="mx-5 h-px bg-white/15" />
 
       <nav className="flex flex-1 flex-col gap-4 overflow-y-auto px-3 py-4">
         {NAV_GROUPS.map((group) => {
@@ -104,7 +104,7 @@ export function Sidebar() {
 
           return (
             <div key={group.label} className="flex flex-col gap-0.5">
-              <span className="px-3 pb-1.5 text-[11px] font-semibold tracking-wide text-text-tertiary">
+              <span className="px-3 pb-1.5 text-[11px] font-semibold tracking-wide text-white/55">
                 {group.label}
               </span>
               {items.map((item) => {
@@ -121,7 +121,7 @@ export function Sidebar() {
                     className={`relative flex items-center gap-2.5 rounded-[var(--radius-sm)] px-3 py-2.5 text-sm font-medium transition-colors ${
                       isActive
                         ? "bg-raised text-text-primary shadow-card"
-                        : "text-text-secondary hover:bg-raised/70 hover:text-text-primary"
+                        : "text-white/75 hover:bg-white/10 hover:text-white"
                     }`}
                   >
                     {isActive && (
