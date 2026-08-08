@@ -1,13 +1,23 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { fetchAlerts, fetchRiskFactors, type Alert, type RiskFactorBreakdown } from "@/lib/api";
+import {
+  fetchAlerts,
+  fetchRiskFactors,
+  fetchNotificationPreview,
+  sendNotifications,
+  type Alert,
+  type RiskFactorBreakdown,
+  type NotificationPreview,
+  type NotificationLogRow,
+} from "@/lib/api";
 import { Topbar } from "@/components/topbar";
 import {
   ALERT_CATEGORY_LABELS_AR,
   ALERT_SEVERITY_LABELS_AR,
   ALERT_STATUS_LABELS_AR,
   RISK_FACTOR_LABELS_AR,
+  NOTIFICATION_CHANNEL_LABELS_AR,
 } from "@marsad/shared";
 import { formatDateTime } from "@/lib/format";
 import { t } from "@/i18n/t";
@@ -17,6 +27,84 @@ const SEVERITY_TONE: Record<string, string> = {
   WARNING: "bg-warning/10 text-warning",
   INFO: "bg-info/10 text-info",
 };
+
+function AlertSendPanel({ alertId }: { alertId: string }) {
+  const [open, setOpen] = useState(false);
+  const [previews, setPreviews] = useState<NotificationPreview[] | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [sending, setSending] = useState(false);
+  const [sentLogs, setSentLogs] = useState<NotificationLogRow[] | null>(null);
+
+  async function handleOpen() {
+    const next = !open;
+    setOpen(next);
+    if (next && !previews) {
+      setLoading(true);
+      try {
+        setPreviews(await fetchNotificationPreview(alertId));
+      } finally {
+        setLoading(false);
+      }
+    }
+  }
+
+  async function handleSend() {
+    setSending(true);
+    try {
+      setSentLogs(await sendNotifications(alertId));
+    } finally {
+      setSending(false);
+    }
+  }
+
+  return (
+    <div className="mt-2">
+      <button
+        type="button"
+        onClick={handleOpen}
+        className="text-xs font-medium text-brand hover:underline"
+      >
+        {open ? "إخفاء الإرسال" : "إرسال هذا التنبيه"}
+      </button>
+      {open && (
+        <div className="mt-2 rounded-[var(--radius-md)] border border-border-subtle bg-sunken p-3">
+          {loading && <p className="text-xs text-text-tertiary">جارٍ التحميل...</p>}
+          {previews && (
+            <>
+              <div className="flex flex-wrap gap-2">
+                {previews.map((p) => {
+                  const sent = sentLogs?.find((l) => l.channel === p.channel);
+                  return (
+                    <span
+                      key={p.channel}
+                      className={`rounded-[3px] border px-2 py-1 text-[11px] font-medium ${
+                        sent
+                          ? "border-success/30 bg-success/10 text-success"
+                          : "border-border-subtle text-text-secondary"
+                      }`}
+                      title={p.renderedContent}
+                    >
+                      {NOTIFICATION_CHANNEL_LABELS_AR[p.channel] ?? p.channel}
+                      {sent ? " ✓" : ""}
+                    </span>
+                  );
+                })}
+              </div>
+              <button
+                type="button"
+                onClick={handleSend}
+                disabled={sending || sentLogs !== null}
+                className="mt-2.5 rounded-[var(--radius-sm)] bg-brand px-3 py-1.5 text-xs font-medium text-white transition-all hover:brightness-110 disabled:opacity-60"
+              >
+                {sentLogs ? "تم الإرسال على كل القنوات" : sending ? "جارٍ الإرسال..." : "إرسال الآن على كل القنوات"}
+              </button>
+            </>
+          )}
+        </div>
+      )}
+    </div>
+  );
+}
 
 export default function AlertsPage() {
   const [alerts, setAlerts] = useState<Alert[] | null>(null);
@@ -59,6 +147,7 @@ export default function AlertsPage() {
                     <p className="text-xs text-text-tertiary">
                       {alert.siteName} · {formatDateTime(alert.createdAt)}
                     </p>
+                    <AlertSendPanel alertId={alert.id} />
                   </div>
                   <span className="shrink-0 rounded-full bg-sunken px-2.5 py-1 text-xs font-medium text-text-secondary">
                     {ALERT_STATUS_LABELS_AR[alert.status] ?? alert.status}
