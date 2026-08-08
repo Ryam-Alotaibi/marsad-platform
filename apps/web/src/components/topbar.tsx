@@ -4,7 +4,6 @@ import { useRouter } from "next/navigation";
 import { useSession } from "@/lib/session-context";
 import { logout } from "@/lib/api";
 import { ROLE_LABELS_AR, TENANT_TYPE_LABELS_AR, type RoleKey, type TenantType } from "@marsad/shared";
-import { ThemeToggle } from "@/components/theme-toggle";
 import { t } from "@/i18n/t";
 
 export function Topbar({ title }: { title: string }) {
@@ -43,7 +42,6 @@ export function Topbar({ title }: { title: string }) {
           <p className="text-sm font-medium text-text-primary">{user.fullName}</p>
           <p className="text-xs text-text-tertiary">{ROLE_LABELS_AR[user.roleKey as RoleKey] ?? user.roleName}</p>
         </div>
-        <ThemeToggle />
         <button
           type="button"
           onClick={handleLogout}

@@ -10,32 +10,34 @@
   primaryColor/secondaryColor الخاصة بها.
 */
 :root {
-  /* Neutral scale — cool silver/gray, matches the reference palette exactly */
+  /* Neutral scale — bright silver/diamond, white-forward. No dark surfaces. */
   --ink-0: #ffffff;
-  --ink-25: #f7f8fa;
-  --ink-50: #eceff4;
-  --ink-100: #dde3ec;
-  --ink-200: #c7cfdc;
-  --ink-300: #a7b1c2;
-  --ink-400: #8792a6;
-  --ink-500: #5c677d;
-  --ink-600: #47505f;
-  --ink-700: #363d48;
-  --ink-800: #262b33;
-  --ink-900: #181c21;
-  --ink-950: #0e1013;
+  --ink-25: #fafbfc;
+  --ink-50: #f2f3f6;
+  --ink-100: #e6e8ec;
+  --ink-200: #d2d5db;
+  --ink-300: #b6bac3;
+  --ink-400: #979ca7;
+  --ink-500: #6b6f76;
+  --ink-600: #34373d;
+  --ink-700: #24262c;
+  --ink-800: #1a1c20;
+  --ink-900: #121316;
+  --ink-950: #0a0a0b;
 
-  /* Accent — same silver ramp, darkest stops used as the solid brand accent
+  /* Accent — dark charcoal/graphite, used as the solid brand accent
      (buttons, active states, icon chips) rather than a colored hue. */
-  --accent-400: #98a2b3;
-  --accent-500: #6b7280;
-  --accent-600: #3e4756;
-  --accent-700: #2b323d;
+  --accent-400: #6b6f76;
+  --accent-500: #46484f;
+  --accent-600: #2a2c31;
+  --accent-700: #1c1d21;
 
-  /* Gold — used sparingly: highlights, badges, active-state emphasis only */
-  --gold-400: #dfc066;
-  --gold-500: #c9a227;
-  --gold-600: #a9822a;
+  /* "Gold" ramp repointed to a silver→graphite accent — used sparingly:
+     highlights, badges, active-state emphasis, the login orbit. No literal
+     gold or dark backgrounds anywhere in this palette. */
+  --gold-400: #c7cbd3;
+  --gold-500: #6b6f76;
+  --gold-600: #24262c;
 
   /* Semantic — muted/institutional, not saturated alert colors */
   --success-500: #2f7a4d;
@@ -60,9 +62,9 @@
   --brand-secondary: var(--accent-700);
   --brand-gold: var(--gold-500);
 
-  --shadow-sm: 0 1px 2px 0 rgb(13 10 7 / 0.06);
-  --shadow-md: 0 4px 12px -2px rgb(13 10 7 / 0.10), 0 2px 4px -2px rgb(13 10 7 / 0.05);
-  --shadow-lg: 0 12px 32px -8px rgb(13 10 7 / 0.18);
+  --shadow-sm: 0 1px 2px 0 rgb(20 22 28 / 0.05), 0 1px 1px 0 rgb(20 22 28 / 0.04);
+  --shadow-md: 0 10px 24px -8px rgb(20 22 28 / 0.14), 0 2px 6px -2px rgb(20 22 28 / 0.07);
+  --shadow-lg: 0 24px 48px -12px rgb(20 22 28 / 0.20);
 
   /* Tighter, squarer radii — formal/institutional rather than rounded-consumer-app */
   --radius-sm: 0.25rem;
@@ -140,12 +142,14 @@ body {
    in the app) gets a shared hover/entrance treatment from this one rule,
    instead of hand-adding it to 25+ page files. */
 .shadow-card {
+  background-image: linear-gradient(135deg, #f9fafb 0%, #ffffff 20%, #e7e9ed 48%, #f7f8fa 68%, #dcdfe4 100%);
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.9), var(--shadow-sm);
   transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
 }
 .shadow-card:hover {
-  transform: translateY(-2px);
-  box-shadow: var(--shadow-md);
-  border-color: color-mix(in srgb, var(--brand-primary) 30%, var(--surface-border));
+  transform: translateY(-3px);
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.9), var(--shadow-lg);
+  border-color: color-mix(in srgb, var(--brand-gold) 45%, var(--surface-border));
 }
 
 /* Per-page content entrance — applied once in DashboardShell, benefits every

@@ -284,6 +284,7 @@ model User {
   passwordHash       String
   phone              String?
   availabilityStatus AvailabilityStatus  @default(AVAILABLE)
+  isSystemAccount    Boolean             @default(false)
   createdAt          DateTime            @default(now())
   updatedAt          DateTime            @updatedAt
 

@@ -153,6 +153,7 @@ async function seedTenant(config: TenantSeed) {
         email: `${ROLE_EMAIL_LOCAL[key]}@${config.slug}.marsad.local`,
         passwordHash,
         phone: "0500000000",
+        isSystemAccount: true,
       },
     });
   }

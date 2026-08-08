@@ -5,7 +5,6 @@ import { useRouter } from "next/navigation";
 import { TENANT_TYPE_LABELS_AR, TENANT_TYPES, type TenantType } from "@marsad/shared";
 import { setupTenant, type SetupTenantPayload } from "@/lib/api";
 import { BrandMark } from "@/components/brand-mark";
-import { ThemeToggle } from "@/components/theme-toggle";
 import { t } from "@/i18n/t";
 
 type FormState = SetupTenantPayload;
@@ -95,7 +94,6 @@ export default function SetupPage() {
           <BrandMark className="h-7 w-7 text-brand" />
           <span className="text-base font-semibold text-text-primary">{t("app.name")}</span>
         </div>
-        <ThemeToggle />
       </div>
 
       <div className="flex flex-1 items-start justify-center px-6 pb-16">

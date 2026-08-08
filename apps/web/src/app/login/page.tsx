@@ -6,7 +6,6 @@ import Link from "next/link";
 import { login } from "@/lib/api";
 import { t } from "@/i18n/t";
 import { BrandMark } from "@/components/brand-mark";
-import { ThemeToggle } from "@/components/theme-toggle";
 
 const DEMO_PASSWORD = "Marsad@2026";
 const DEMO_ACCOUNTS = [
@@ -75,9 +74,6 @@ export default function LoginPage() {
       </div>
 
       <div className="flex flex-1 flex-col">
-        <div className="flex justify-end p-6">
-          <ThemeToggle />
-        </div>
         <div className="flex flex-1 items-center justify-center px-6 pb-24">
           <div className="w-full max-w-sm">
             <div className="mb-8 flex items-center gap-2 lg:hidden">

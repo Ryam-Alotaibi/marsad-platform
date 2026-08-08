@@ -14,6 +14,7 @@ export class SupportService {
     return this.prisma.user.findMany({
       where: {
         tenantId,
+        isSystemAccount: false,
         role: {
           key: {
             in: ['SUPPORT_ENGINEER', 'OPERATIONS_CENTER', 'SITE_MANAGER'],
@@ -37,6 +38,7 @@ export class SupportService {
       where: {
         tenantId,
         availabilityStatus: 'AVAILABLE',
+        isSystemAccount: false,
         role: { key: { in: ['SUPPORT_ENGINEER', 'OPERATIONS_CENTER'] } },
       },
       include: { role: { select: { key: true, name: true } } },
