@@ -99,7 +99,7 @@ export default function FuturePage() {
   return (
     <>
       <Topbar title="مرصاد المستقبل" />
-      <main className="flex-1 px-6 py-8">
+      <main className="flex-1 px-4 py-5 sm:px-6 sm:py-8">
         <div className="mx-auto flex max-w-3xl flex-col gap-6">
           <section className="flex items-center gap-4 rounded-[var(--radius-lg)] border border-border-subtle bg-raised px-6 py-5 shadow-card">
             <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-[var(--radius-md)] bg-brand text-[var(--brand-gold)]">

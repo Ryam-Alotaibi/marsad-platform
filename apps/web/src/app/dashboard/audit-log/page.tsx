@@ -31,7 +31,7 @@ export default function AuditLogPage() {
   return (
     <>
       <Topbar title="سجل التدقيق" />
-      <main className="flex-1 px-6 py-8">
+      <main className="flex-1 px-4 py-5 sm:px-6 sm:py-8">
         <div className="mx-auto flex max-w-4xl flex-col gap-6">
           <section className="rounded-[var(--radius-lg)] border border-border-subtle bg-raised p-5 shadow-card">
             <p className="text-sm leading-relaxed text-text-secondary">

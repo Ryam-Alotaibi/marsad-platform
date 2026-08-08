@@ -16,13 +16,13 @@ const TONE_CLASSES: Record<NonNullable<StatCardProps["tone"]>, string> = {
 
 export function StatCard({ label, value, icon, tone = "brand" }: StatCardProps) {
   return (
-    <div className="flex items-center gap-4 rounded-[var(--radius-lg)] border border-border-subtle bg-raised p-5 shadow-card">
-      <div className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-[var(--radius-md)] ${TONE_CLASSES[tone]}`}>
+    <div className="flex items-center gap-3 rounded-[var(--radius-lg)] border border-border-subtle bg-raised p-3.5 shadow-card sm:gap-4 sm:p-5">
+      <div className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-[var(--radius-md)] sm:h-11 sm:w-11 ${TONE_CLASSES[tone]}`}>
         {icon}
       </div>
-      <div>
-        <p className="text-2xl font-semibold text-text-primary">{value}</p>
-        <p className="text-xs text-text-tertiary">{label}</p>
+      <div className="min-w-0">
+        <p className="truncate text-lg font-semibold text-text-primary sm:text-2xl">{value}</p>
+        <p className="truncate text-xs text-text-tertiary">{label}</p>
       </div>
     </div>
   );

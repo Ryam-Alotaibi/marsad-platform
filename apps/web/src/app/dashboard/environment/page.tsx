@@ -32,7 +32,7 @@ export default function EnvironmentPage() {
   return (
     <>
       <Topbar title="المخاطر البيئية" />
-      <main className="flex-1 px-6 py-8">
+      <main className="flex-1 px-4 py-5 sm:px-6 sm:py-8">
         <div className="mx-auto flex max-w-4xl flex-col gap-6">
           {data && (
             <>

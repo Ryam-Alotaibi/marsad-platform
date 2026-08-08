@@ -42,21 +42,21 @@ export default function DashboardHomePage() {
   return (
     <>
       <Topbar title="الرئيسية" />
-      <main className="flex-1 px-6 py-8">
-        <div className="mx-auto flex max-w-5xl flex-col gap-6">
-          <section className="flex items-center gap-4 rounded-[var(--radius-lg)] border border-border-subtle bg-raised px-6 py-5 shadow-card">
-            <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-[var(--radius-md)] bg-brand text-[var(--brand-gold)]">
-              <BrandMark className="h-5 w-5" />
+      <main className="flex-1 px-4 py-5 sm:px-6 sm:py-8">
+        <div className="mx-auto flex max-w-5xl flex-col gap-4 sm:gap-6">
+          <section className="flex items-center gap-3 rounded-[var(--radius-lg)] border border-border-subtle bg-raised px-4 py-4 shadow-card sm:gap-4 sm:px-6 sm:py-5">
+            <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-[var(--radius-md)] bg-brand text-[var(--brand-gold)] sm:h-11 sm:w-11">
+              <BrandMark className="h-4.5 w-4.5 sm:h-5 sm:w-5" />
             </div>
             <div>
               <p className="text-xs font-medium text-text-tertiary">{t("app.name")} · {t("app.tagline")}</p>
-              <h1 className="mt-1 text-xl font-semibold text-text-primary">{tenant.nameAr}</h1>
+              <h1 className="mt-1 text-lg font-semibold text-text-primary sm:text-xl">{tenant.nameAr}</h1>
             </div>
           </section>
 
           {overview && (
             <>
-              <section className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+              <section className="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4">
                 <StatCard
                   label={t("dashboard.activeSystems")}
                   value={String(overview.activeSystemsCount)}
@@ -85,7 +85,7 @@ export default function DashboardHomePage() {
 
               <section>
                 <h2 className="mb-3 text-sm font-semibold text-text-primary">تنقّل سريع</h2>
-                <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
+                <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
                   {QUICK_LINKS.map((link) => {
                     const Icon = link.icon;
                     return (
