@@ -90,7 +90,7 @@ export function Sidebar() {
   const isAdmin = ADMIN_ONLY_ROLES.has(user.roleKey);
 
   return (
-    <aside className="flex w-64 shrink-0 flex-col border-e border-border-subtle bg-raised">
+    <aside className="flex w-64 shrink-0 flex-col border-e border-border-subtle bg-sunken">
       <div className="flex items-center gap-2.5 px-5 py-5">
         <BrandMark className="h-7 w-7 text-[var(--brand-gold)]" />
         <span className="text-base font-semibold text-text-primary">{t("app.name")}</span>
@@ -120,8 +120,8 @@ export function Sidebar() {
                     href={item.href}
                     className={`relative flex items-center gap-2.5 rounded-[var(--radius-sm)] px-3 py-2.5 text-sm font-medium transition-colors ${
                       isActive
-                        ? "bg-sunken text-text-primary"
-                        : "text-text-secondary hover:bg-sunken/60 hover:text-text-primary"
+                        ? "bg-raised text-text-primary shadow-card"
+                        : "text-text-secondary hover:bg-raised/70 hover:text-text-primary"
                     }`}
                   >
                     {isActive && (
