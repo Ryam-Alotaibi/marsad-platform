@@ -50,19 +50,13 @@ export default function AboutPage() {
       <Topbar title="عن النظام" />
       <main className="flex-1 px-6 py-8">
         <div className="mx-auto flex max-w-4xl flex-col gap-6">
-          <section
-            className="flex items-center gap-4 rounded-[var(--radius-lg)] px-6 py-6 text-white shadow-card"
-            style={{
-              background:
-                "linear-gradient(135deg, var(--brand-secondary, var(--accent-700)) 0%, var(--brand-primary, var(--accent-600)) 100%)",
-            }}
-          >
-            <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-[var(--radius-md)] bg-white/10 text-[var(--brand-gold)]">
+          <section className="flex items-center gap-4 rounded-[var(--radius-lg)] border border-border-subtle bg-raised px-6 py-6 shadow-card">
+            <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-[var(--radius-md)] bg-brand text-[var(--brand-gold)]">
               <BrandMark className="h-8 w-8" />
             </div>
             <div>
-              <h1 className="text-xl font-semibold">{t("app.name")}</h1>
-              <p className="mt-1 text-sm text-white/85">{t("app.tagline")}</p>
+              <h1 className="text-xl font-semibold text-text-primary">{t("app.name")}</h1>
+              <p className="mt-1 text-sm text-text-secondary">{t("app.tagline")}</p>
             </div>
           </section>
 

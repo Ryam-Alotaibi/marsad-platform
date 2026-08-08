@@ -4,33 +4,33 @@
 
 /*
   نظام تصميم مرصاد — Design tokens (مراجعة v2: هوية رسمية حكومية)
-  كحلي/تيل داكن أساسي + لمسة ذهبية للتمييز، على محايدات دافئة (لا رمادي
-  أزرق البرمجيات التقنية العام) — بديل مقصود عن الأزرق الأحادي السابق.
-  ليست ألوان Bootstrap/Tailwind الافتراضية، وليست نسخة عن هوية أي جهة
-  حكومية فعلية. تُدرَج كمتغيرات CSS بحيث تقدر كل جهة (Tenant) تجاوزها
-  بـ primaryColor/secondaryColor الخاصة بها.
+  فضي/رمادي محايد أساسي + لمسة ذهبية للتمييز فقط — هوية بصيرية خفيفة
+  رسمية، لا أزرق ولا كحلي غامق. ليست ألوان Bootstrap/Tailwind الافتراضية.
+  تُدرَج كمتغيرات CSS بحيث تقدر كل جهة (Tenant) تجاوزها بـ
+  primaryColor/secondaryColor الخاصة بها.
 */
 :root {
-  /* Neutral scale — warm stone, not cool tech-blue-gray */
+  /* Neutral scale — cool silver/gray, matches the reference palette exactly */
   --ink-0: #ffffff;
-  --ink-25: #faf9f6;
-  --ink-50: #f3f1ea;
-  --ink-100: #e7e3d7;
-  --ink-200: #d3ccb9;
-  --ink-300: #b3a98e;
-  --ink-400: #8c8267;
-  --ink-500: #6b6350;
-  --ink-600: #52493a;
-  --ink-700: #3c352a;
-  --ink-800: #28221b;
-  --ink-900: #18140f;
-  --ink-950: #0d0a07;
+  --ink-25: #f7f8fa;
+  --ink-50: #eceff4;
+  --ink-100: #dde3ec;
+  --ink-200: #c7cfdc;
+  --ink-300: #a7b1c2;
+  --ink-400: #8792a6;
+  --ink-500: #5c677d;
+  --ink-600: #47505f;
+  --ink-700: #363d48;
+  --ink-800: #262b33;
+  --ink-900: #181c21;
+  --ink-950: #0e1013;
 
-  /* Accent — deep navy-teal, formal/institutional rather than SaaS-bright */
-  --accent-400: #3e8fa0;
-  --accent-500: #1c6b7f;
-  --accent-600: #124c5c;
-  --accent-700: #0b3641;
+  /* Accent — same silver ramp, darkest stops used as the solid brand accent
+     (buttons, active states, icon chips) rather than a colored hue. */
+  --accent-400: #98a2b3;
+  --accent-500: #6b7280;
+  --accent-600: #3e4756;
+  --accent-700: #2b323d;
 
   /* Gold — used sparingly: highlights, badges, active-state emphasis only */
   --gold-400: #dfc066;

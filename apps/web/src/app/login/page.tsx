@@ -39,27 +39,31 @@ export default function LoginPage() {
 
   return (
     <div className="flex flex-1 bg-canvas">
-      <div className="relative hidden flex-1 flex-col justify-between overflow-hidden bg-[var(--brand-secondary,var(--ink-950))] p-12 text-white lg:flex">
+      <div className="relative hidden flex-1 flex-col justify-between overflow-hidden border-e border-border-subtle bg-sunken p-12 lg:flex">
         <div
           aria-hidden
-          className="pointer-events-none absolute inset-0 opacity-40"
+          className="pointer-events-none absolute inset-0"
           style={{
             backgroundImage:
-              "radial-gradient(circle at 20% 15%, var(--brand-primary, var(--accent-500)) 0%, transparent 45%), radial-gradient(circle at 85% 75%, var(--accent-400) 0%, transparent 40%)",
+              "radial-gradient(color-mix(in srgb, var(--text-primary) 8%, transparent) 1px, transparent 1px)",
+            backgroundSize: "24px 24px",
           }}
         />
-        <div className="relative flex items-center gap-3 text-white">
-          <BrandMark className="h-9 w-9" />
-          <span className="text-lg font-semibold tracking-tight">{t("app.name")}</span>
+        <div className="relative flex items-center gap-3">
+          <BrandMark className="h-9 w-9 text-brand" />
+          <span className="text-lg font-semibold tracking-tight text-text-primary">{t("app.name")}</span>
         </div>
         <div className="relative max-w-md">
-          <h1 className="text-3xl font-semibold leading-tight text-white">{t("app.tagline")}</h1>
-          <p className="mt-4 text-sm leading-relaxed text-white/80">
+          <div className="mb-6 flex h-16 w-16 items-center justify-center rounded-[var(--radius-lg)] bg-brand text-[var(--brand-gold)] shadow-card">
+            <BrandMark className="h-9 w-9" />
+          </div>
+          <h1 className="text-3xl font-semibold leading-tight text-text-primary">{t("app.tagline")}</h1>
+          <p className="mt-4 text-sm leading-relaxed text-text-secondary">
             منصة عامة قابلة للإعداد لأي جهة — حكومية، صحية، أو خاصة — تجمع قراءات الكهرباء
             والاتصالات والطقس وأجهزة الاستشعار في مكان واحد للتنبؤ بالأعطال قبل وقوعها.
           </p>
         </div>
-        <div className="relative flex flex-col gap-1 text-xs text-white/60">
+        <div className="relative flex flex-col gap-1 text-xs text-text-tertiary">
           <span>إصدار تجريبي — المرحلة الأولى</span>
           <span>الفكرة والتنفيذ: ريام · إشراف: م. عبدالرحمن المعارك</span>
         </div>

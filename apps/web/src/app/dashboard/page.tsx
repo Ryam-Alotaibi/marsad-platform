@@ -5,6 +5,7 @@ import Link from "next/link";
 import { fetchOverview, type OverviewResponse } from "@/lib/api";
 import { useSession } from "@/lib/session-context";
 import { Topbar } from "@/components/topbar";
+import { BrandMark } from "@/components/brand-mark";
 import { StatCard } from "@/components/stat-card";
 import { ActivityIcon, PulseIcon, CloudIcon, ThermometerIcon } from "@/components/stat-icons";
 import { BoltIcon, ShieldIcon, MapIcon, ChatIcon } from "@/components/nav-icons";
@@ -43,15 +44,14 @@ export default function DashboardHomePage() {
       <Topbar title="الرئيسية" />
       <main className="flex-1 px-6 py-8">
         <div className="mx-auto flex max-w-5xl flex-col gap-6">
-          <section
-            className="rounded-[var(--radius-lg)] px-6 py-5 text-white shadow-card"
-            style={{
-              background:
-                "linear-gradient(135deg, var(--brand-secondary, var(--accent-700)) 0%, var(--brand-primary, var(--accent-600)) 100%)",
-            }}
-          >
-            <p className="text-xs font-medium text-white/60">{t("app.name")} · {t("app.tagline")}</p>
-            <h1 className="mt-1 text-xl font-semibold">{tenant.nameAr}</h1>
+          <section className="flex items-center gap-4 rounded-[var(--radius-lg)] border border-border-subtle bg-raised px-6 py-5 shadow-card">
+            <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-[var(--radius-md)] bg-brand text-[var(--brand-gold)]">
+              <BrandMark className="h-5 w-5" />
+            </div>
+            <div>
+              <p className="text-xs font-medium text-text-tertiary">{t("app.name")} · {t("app.tagline")}</p>
+              <h1 className="mt-1 text-xl font-semibold text-text-primary">{tenant.nameAr}</h1>
+            </div>
           </section>
 
           {overview && (

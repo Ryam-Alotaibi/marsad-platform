@@ -101,17 +101,11 @@ export default function FuturePage() {
       <Topbar title="مرصاد المستقبل" />
       <main className="flex-1 px-6 py-8">
         <div className="mx-auto flex max-w-3xl flex-col gap-6">
-          <section
-            className="flex items-center gap-4 rounded-[var(--radius-lg)] px-6 py-5 text-white shadow-card"
-            style={{
-              background:
-                "linear-gradient(135deg, var(--brand-secondary, var(--accent-700)) 0%, var(--brand-primary, var(--accent-600)) 100%)",
-            }}
-          >
-            <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-[var(--radius-md)] bg-white/10 text-[var(--brand-gold)]">
+          <section className="flex items-center gap-4 rounded-[var(--radius-lg)] border border-border-subtle bg-raised px-6 py-5 shadow-card">
+            <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-[var(--radius-md)] bg-brand text-[var(--brand-gold)]">
               <RadarIcon className="h-5 w-5" />
             </div>
-            <p className="text-sm leading-relaxed text-white/85">
+            <p className="text-sm leading-relaxed text-text-secondary">
               محرك محاكاة يُشغّل نفس نموذج التنبؤ الحقيقي (المُدرَّب عبر مرصاد الاتحادي إن
               توفّر) على مدخلات افتراضية، ليكتشف مخاطر مركّبة لم تحدث بعد قبل وقوعها فعليًا.
             </p>
