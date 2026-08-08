@@ -90,7 +90,7 @@ export function Sidebar() {
   const isAdmin = ADMIN_ONLY_ROLES.has(user.roleKey);
 
   return (
-    <aside className="flex w-64 shrink-0 flex-col border-e border-border-subtle bg-sunken">
+    <aside className="flex w-64 shrink-0 flex-col border-e border-border-subtle bg-[#ced2da]">
       <div className="flex items-center gap-2.5 px-5 py-5">
         <BrandMark className="h-7 w-7 text-[var(--brand-gold)]" />
         <span className="text-base font-semibold text-text-primary">{t("app.name")}</span>
