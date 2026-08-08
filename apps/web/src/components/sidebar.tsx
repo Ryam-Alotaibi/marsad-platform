@@ -23,6 +23,7 @@ import {
 import { CloudIcon } from "@/components/stat-icons";
 import { BrandMark } from "@/components/brand-mark";
 import { useSession } from "@/lib/session-context";
+import { useSidebar } from "@/lib/sidebar-context";
 import { t } from "@/i18n/t";
 
 interface NavItem {
@@ -87,10 +88,22 @@ const ADMIN_ONLY_ROLES = new Set(["TENANT_ADMIN", "SUPER_ADMIN"]);
 export function Sidebar() {
   const pathname = usePathname();
   const { user } = useSession();
+  const { isOpen, close } = useSidebar();
   const isAdmin = ADMIN_ONLY_ROLES.has(user.roleKey);
 
   return (
-    <aside className="flex w-64 shrink-0 flex-col border-e border-border-subtle bg-[var(--brand-gold)]">
+    <>
+      <div
+        onClick={close}
+        aria-hidden="true"
+        className={`fixed inset-0 z-40 bg-black/40 transition-opacity md:hidden ${
+          isOpen ? "opacity-100" : "pointer-events-none opacity-0"
+        }`}
+      />
+      <aside
+        className="fixed inset-y-0 start-0 z-50 flex w-64 shrink-0 flex-col border-e border-border-subtle bg-[var(--brand-gold)] transition-transform duration-200 md:static md:!transform-none"
+        style={{ transform: isOpen ? "translateX(0)" : "translateX(100%)" }}
+      >
       <div className="flex items-center gap-2.5 px-5 py-5">
         <BrandMark className="h-7 w-7 text-white" />
         <span className="text-base font-semibold text-white">{t("app.name")}</span>
@@ -118,6 +131,7 @@ export function Sidebar() {
                   <Link
                     key={item.href}
                     href={item.href}
+                    onClick={close}
                     className={`relative flex items-center gap-2.5 rounded-[var(--radius-sm)] px-3 py-2.5 text-sm font-medium transition-colors ${
                       isActive
                         ? "bg-raised text-text-primary shadow-card"
@@ -139,6 +153,7 @@ export function Sidebar() {
           );
         })}
       </nav>
-    </aside>
+      </aside>
+    </>
   );
 }
