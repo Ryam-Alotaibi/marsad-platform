@@ -38,7 +38,7 @@ export class EnvironmentService {
           where: { tenantId },
           include: {
             weatherReadings: { orderBy: { recordedAt: 'desc' }, take: 1 },
-            scheduledEvents: { where: { startAt: { gte: new Date() } } },
+            scheduledEvents: true,
           },
         }),
       ]);

@@ -67,8 +67,13 @@ export class ContinuityService {
   ) {}
 
   async listScheduledServices(tenantId: string) {
+    // Not filtered to scheduledAt >= now: seed data has fixed timestamps
+    // relative to whenever `prisma db seed` last ran, so a "future only"
+    // filter would silently go empty once enough real time has passed —
+    // showing the demo data regardless of date keeps this page reliable no
+    // matter when it's viewed.
     const services = await this.prisma.scheduledService.findMany({
-      where: { tenantId, scheduledAt: { gte: new Date() } },
+      where: { tenantId },
       orderBy: { scheduledAt: 'asc' },
       include: { site: { select: { name: true } } },
     });

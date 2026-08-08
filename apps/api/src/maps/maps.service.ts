@@ -80,9 +80,8 @@ export class MapsService {
       this.prisma.telecomProvider.findMany({ where: { tenantId } }),
     ]);
 
-    const since = new Date(Date.now() - 6 * 60 * 60 * 1000);
     const readings = await this.prisma.telecomStatusReading.findMany({
-      where: { site: { tenantId }, recordedAt: { gte: since } },
+      where: { site: { tenantId } },
       orderBy: { recordedAt: 'desc' },
     });
 
