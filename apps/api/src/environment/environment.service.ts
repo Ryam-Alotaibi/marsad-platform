@@ -23,18 +23,16 @@ export class EnvironmentService {
   constructor(private readonly prisma: PrismaService) {}
 
   async getEnvironment(tenantId: string) {
-    const since24h = new Date(Date.now() - 24 * 60 * 60 * 1000);
-
     const [telecomReadings, powerReadings, weatherReadings, sites] =
       await Promise.all([
         this.prisma.telecomStatusReading.findMany({
-          where: { site: { tenantId }, recordedAt: { gte: since24h } },
+          where: { site: { tenantId } },
         }),
         this.prisma.powerReading.findMany({
-          where: { site: { tenantId }, recordedAt: { gte: since24h } },
+          where: { site: { tenantId } },
         }),
         this.prisma.weatherReading.findMany({
-          where: { site: { tenantId }, recordedAt: { gte: since24h } },
+          where: { site: { tenantId } },
         }),
         this.prisma.site.findMany({
           where: { tenantId },

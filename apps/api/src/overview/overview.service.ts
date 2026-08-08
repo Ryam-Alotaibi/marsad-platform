@@ -25,8 +25,6 @@ export class OverviewService {
   constructor(private readonly prisma: PrismaService) {}
 
   async getOverview(tenantId: string) {
-    const since24h = new Date(Date.now() - 24 * 60 * 60 * 1000);
-
     const [
       activeSystemsCount,
       recentRiskFactors,
@@ -50,7 +48,7 @@ export class OverviewService {
       }),
       this.prisma.telecomStatusReading.groupBy({
         by: ['providerId'],
-        where: { site: { tenantId }, recordedAt: { gte: since24h } },
+        where: { site: { tenantId } },
         _avg: { latencyMs: true, packetLossPct: true },
       }),
       this.prisma.telecomProvider.findMany({ where: { tenantId } }),

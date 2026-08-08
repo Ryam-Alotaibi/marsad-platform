@@ -51,7 +51,15 @@ export class MapsService {
     });
     if (!site) throw new NotFoundException('الموقع غير موجود');
 
-    const since = new Date(Date.now() - 24 * 60 * 60 * 1000);
+    // Anchored to the latest seeded reading (not wall-clock "now") so the
+    // 24h window stays meaningful regardless of how much real time has
+    // passed since the demo data was seeded.
+    const latest = await this.prisma.powerReading.findFirst({
+      where: { siteId },
+      orderBy: { recordedAt: 'desc' },
+    });
+    if (!latest) return [];
+    const since = new Date(latest.recordedAt.getTime() - 24 * 60 * 60 * 1000);
     const readings = await this.prisma.powerReading.findMany({
       where: { siteId, recordedAt: { gte: since } },
       orderBy: { recordedAt: 'asc' },
