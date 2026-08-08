@@ -54,8 +54,13 @@ export default function LoginPage() {
           <span className="text-lg font-semibold tracking-tight text-text-primary">{t("app.name")}</span>
         </div>
         <div className="relative max-w-md">
-          <div className="mb-6 flex h-16 w-16 items-center justify-center rounded-[var(--radius-lg)] bg-brand text-[var(--brand-gold)] shadow-card">
-            <BrandMark className="h-9 w-9" />
+          <div className="orbit-3d-wrap mb-8 flex h-40 w-40 items-center justify-center">
+            <div className="orbit-3d">
+              <div className="orbit-3d-ring orbit-3d-ring--x" />
+              <div className="orbit-3d-ring orbit-3d-ring--y" />
+              <div className="orbit-3d-ring orbit-3d-ring--z" />
+              <div className="orbit-3d-core" />
+            </div>
           </div>
           <h1 className="text-3xl font-semibold leading-tight text-text-primary">{t("app.tagline")}</h1>
           <p className="mt-4 text-sm leading-relaxed text-text-secondary">
